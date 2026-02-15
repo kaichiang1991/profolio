@@ -4,6 +4,7 @@ import Home from './pages/Home.tsx'
 import Projects from './pages/Projects.tsx'
 import Experience from './pages/Experience.tsx'
 import Contact from './pages/Contact.tsx'
+import Footer from './components/Footer.tsx'
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/experience" element={<Experience />} />
         <Route path="/contact" element={<Contact />} />
       </Routes>
+      <Footer />
     </div>
   )
 }
