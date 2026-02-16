@@ -47,9 +47,7 @@ export default function Experience() {
   // 計算每個經歷的位置
   const cardHeight = 140 // 每個卡片的高度（px）
   const laneWidth = 300 // 每個 lane 的寬度（px）
-  const barWidth = 60 // 矩形條的寬度（px）
-  const gapWidth = 10 // 矩形條與卡片之間的間隙（px）
-  const cardWidth = 230 // 卡片的寬度（px）
+  const barWidth = 10 // 矩形條的寬度（px）
   const timelineHeight = 1200 // 時間軸的總高度（px）
   const cardPadding = 10 // 卡片之間的垂直間距（px）
   const minBarHeight = 20 // 矩形條的最小高度（px）
@@ -130,23 +128,29 @@ export default function Experience() {
         <div className="absolute left-0 top-0 pointer-events-none" style={{ width: '100%', minHeight: `${timelineHeight}px` }}>
           <div className="relative" style={{ marginLeft: '52px', minHeight: `${timelineHeight}px` }}>
             {cardsWithPosition.map((card, index) => {
-              const barColors: Record<JobType, string> = {
-                'full-time': 'bg-blue-500',
-                'part-time': 'bg-green-500',
-                'freelance': 'bg-purple-500',
-                'contract': 'bg-orange-500',
-              }
+              // 為每個工作經歷分配不同顏色
+              const colors = [
+                'bg-blue-500',
+                'bg-green-500',
+                'bg-purple-500',
+                'bg-orange-500',
+                'bg-pink-500',
+                'bg-teal-500',
+                'bg-indigo-500',
+                'bg-yellow-500',
+              ]
+              const barColor = colors[index % colors.length]
 
               return (
                 <div
                   key={`bar-${card.company}-${card.start}-${index}`}
                   className={`
                     absolute rounded opacity-80
-                    ${barColors[card.type]}
+                    ${barColor}
                   `}
                   style={{
                     top: `${card.barTop}px`,
-                    left: `${card.lane * laneWidth + 16}px`, // 16px = gap after timeline
+                    left: '16px', // 固定在時間線右邊
                     width: `${barWidth}px`,
                     height: `${card.barHeight}px`,
                   }}
@@ -156,41 +160,6 @@ export default function Experience() {
             })}
           </div>
         </div>
-
-        {/* SVG Layer for connecting lines */}
-        <svg
-          className="absolute left-0 top-0 pointer-events-none"
-          style={{
-            width: '100%',
-            height: '100%',
-            minHeight: `${timelineHeight}px`,
-          }}
-        >
-          {cardsWithPosition.map((card, index) => {
-            const timelineX = 52 + 16 + 2 // yearMarker width + gap + half of axis width
-            const timelineY = (card.timelinePosition / 100) * timelineHeight // 根據 start 時間在時間軸上的 Y 座標
-            const cardX = timelineX + 16 + card.lane * laneWidth // 起始 X + gap + lane offset
-
-            return (
-              <g key={`line-${card.company}-${card.start}-${index}`}>
-                {/* 橫線 - 從時間軸到卡片（完全水平） */}
-                <line
-                  x1={timelineX}
-                  y1={timelineY}
-                  x2={cardX}
-                  y2={timelineY}
-                  stroke="#d4d4d8"
-                  strokeWidth="2"
-                  strokeDasharray="4 4"
-                />
-                {/* 起點圓點（在時間軸上的 start 位置） */}
-                <circle cx={timelineX} cy={timelineY} r="4" fill="#3b82f6" />
-                {/* 終點圓點（在卡片左側） */}
-                <circle cx={cardX} cy={timelineY} r="3" fill="#71717a" />
-              </g>
-            )
-          })}
-        </svg>
 
         {/* Experience Cards Container */}
         <div className="flex-1 relative pl-4" style={{ minHeight: `${timelineHeight}px` }}>
