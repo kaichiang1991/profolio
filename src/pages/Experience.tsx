@@ -2,7 +2,6 @@ import { useLanguage } from '../i18n/index.ts'
 import { experiences, type JobType } from '../data/experience.ts'
 import {
   getTimeRange,
-  assignLanes,
   calculatePosition,
 } from '../utils/timeline.ts'
 import TimelineYearMarkers from '../components/TimelineYearMarkers.tsx'
@@ -24,23 +23,6 @@ const typeLabels: Record<JobType, { zh: string; en: string }> = {
 export default function Experience() {
   const { locale, t } = useLanguage()
 
-  // 計算時間範圍和泳道
-  const timeRange = getTimeRange(experiences)
-  const experiencesWithLanes = assignLanes(experiences)
-  const maxLane = experiencesWithLanes.reduce((max, exp) => Math.max(max, exp.lane), 0)
-  const laneCount = maxLane + 1
-
-  // 警告過多泳道
-  if (laneCount > 5) {
-    console.warn(`Large number of lanes detected (${laneCount}). Consider reviewing data for better visual presentation.`)
-  }
-
-  // 格式化日期
-  const formatDate = (date: string) => {
-    const [year, month] = date.split('-')
-    return `${year}/${month}`
-  }
-
   // 處理空狀態
   if (experiences.length === 0) {
     return (
@@ -53,6 +35,60 @@ export default function Experience() {
     )
   }
 
+  // 計算時間範圍
+  const timeRange = getTimeRange(experiences)
+
+  // 格式化日期
+  const formatDate = (date: string) => {
+    const [year, month] = date.split('-')
+    return `${year}/${month}`
+  }
+
+  // 計算每個經歷的位置
+  const cardHeight = 140 // 每個卡片的高度（px）
+  const laneWidth = 300 // 每個 lane 的寬度（px）
+  const barWidth = 60 // 矩形條的寬度（px）
+  const gapWidth = 10 // 矩形條與卡片之間的間隙（px）
+  const cardWidth = 230 // 卡片的寬度（px）
+  const timelineHeight = 1200 // 時間軸的總高度（px）
+  const cardPadding = 10 // 卡片之間的垂直間距（px）
+  const minBarHeight = 20 // 矩形條的最小高度（px）
+
+  // 按 start 時間排序所有經歷
+  const sortedExperiences = [...experiences].sort((a, b) =>
+    a.start.localeCompare(b.start)
+  )
+
+  // 追蹤每個 lane 的最後一張卡片的底部位置
+  const laneBottoms: number[] = []
+
+  const cardsWithPosition = sortedExperiences.map((exp) => {
+    const position = calculatePosition(
+      { start: exp.start, end: exp.start } as any,
+      timeRange
+    )
+
+    // 卡片的 Y 位置 = start 時間在時間軸上的位置（頂部對齊）
+    const cardY = (position.top / 100) * timelineHeight
+    const cardBottom = cardY + cardHeight + cardPadding
+
+    // 找到第一個不會重疊的 lane
+    let lane = 0
+    while (lane < laneBottoms.length && laneBottoms[lane] > cardY) {
+      lane++
+    }
+
+    // 更新這個 lane 的底部位置
+    laneBottoms[lane] = cardBottom
+
+    return {
+      ...exp,
+      timelinePosition: position.top, // 在時間軸上的位置（%）
+      cardTop: cardY, // 卡片的實際位置（px），與時間軸位置對齊
+      lane, // 動態分配的 lane，避免重疊
+    }
+  })
+
   return (
     <main className="max-w-6xl mx-auto px-6 py-20">
       <h1 className="font-heading text-4xl md:text-5xl font-bold tracking-tight mb-4">
@@ -63,68 +99,104 @@ export default function Experience() {
       </p>
 
       {/* Timeline Container */}
-      <div className="flex gap-4">
+      <div className="flex gap-4 relative">
         {/* Year Markers Column */}
-        <div className="w-12 md:w-20 flex-shrink-0 relative" style={{ minHeight: '1200px' }}>
+        <div className="w-12 md:w-20 shrink-0 relative" style={{ minHeight: `${timelineHeight}px` }}>
           <TimelineYearMarkers range={timeRange} />
         </div>
 
         {/* Timeline Axis */}
-        <div className="w-0.5 bg-zinc-300 flex-shrink-0" />
+        <div className="w-0.5 bg-zinc-300 shrink-0 relative" style={{ minHeight: `${timelineHeight}px` }} />
+
+        {/* SVG Layer for connecting lines */}
+        <svg
+          className="absolute left-0 top-0 pointer-events-none"
+          style={{
+            width: '100%',
+            height: '100%',
+            minHeight: `${timelineHeight}px`,
+          }}
+        >
+          {cardsWithPosition.map((card, index) => {
+            const timelineX = 52 + 16 + 2 // yearMarker width + gap + half of axis width
+            const timelineY = (card.timelinePosition / 100) * timelineHeight // 根據 start 時間在時間軸上的 Y 座標
+            const cardX = timelineX + 16 + card.lane * laneWidth // 起始 X + gap + lane offset
+
+            return (
+              <g key={`line-${card.company}-${card.start}-${index}`}>
+                {/* 橫線 - 從時間軸到卡片（完全水平） */}
+                <line
+                  x1={timelineX}
+                  y1={timelineY}
+                  x2={cardX}
+                  y2={timelineY}
+                  stroke="#d4d4d8"
+                  strokeWidth="2"
+                  strokeDasharray="4 4"
+                />
+                {/* 起點圓點（在時間軸上的 start 位置） */}
+                <circle cx={timelineX} cy={timelineY} r="4" fill="#3b82f6" />
+                {/* 終點圓點（在卡片左側） */}
+                <circle cx={cardX} cy={timelineY} r="3" fill="#71717a" />
+              </g>
+            )
+          })}
+        </svg>
 
         {/* Experience Cards Container */}
-        <div className="flex-1 relative" style={{ minHeight: '1200px' }}>
-          {experiencesWithLanes.map((exp, index) => {
-            const position = calculatePosition(exp, timeRange)
+        <div className="flex-1 relative pl-4" style={{ minHeight: `${timelineHeight}px` }}>
+          {cardsWithPosition.map((card, index) => {
             const now = new Date()
             const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
-            const isPresent = exp.end === null
-            const endDate = exp.end || currentDate
-
-            // 計算泳道位置
-            // 預設最少按 3 個 lane 的寬度計算，超過則按實際數量
-            const minLanes = 3
-            const effectiveLaneCount = Math.max(laneCount, minLanes)
-            const laneWidth = 100 / effectiveLaneCount
-            const leftOffset = exp.lane * laneWidth
-
-            // 為緊鄰的工作預留間隙（減少 2% 高度作為視覺間距）
-            const adjustedHeight = Math.max(position.height - 2, 8)
+            const isPresent = card.end === null
+            const endDate = card.end || currentDate
 
             return (
               <div
-                key={`${exp.company}-${index}`}
+                key={`${card.company}-${index}`}
                 className={`
-                  absolute rounded-lg border-l-4 shadow-md
-                  p-2 md:p-3 lg:p-4
-                  text-xs md:text-sm
-                  transition-all duration-200 hover:shadow-lg hover:scale-[1.02]
-                  ${typeColors[exp.type]}
+                  absolute rounded-lg border-l-4 shadow-sm
+                  p-3 md:p-4
+                  text-xs
+                  transition-all duration-200 hover:shadow-md
+                  ${typeColors[card.type]}
                 `}
                 style={{
-                  top: `${position.top}%`,
-                  minHeight: `${Math.max(adjustedHeight, 10)}%`,
-                  left: `calc(${leftOffset}% + 8px)`,
-                  width: `calc(${laneWidth}% - 24px)`,
-                  minWidth: effectiveLaneCount > 2 ? '150px' : 'auto',
+                  top: `${card.cardTop}px`,
+                  left: `${card.lane * laneWidth}px`,
+                  width: '230px',
+                  minHeight: `${cardHeight}px`,
                 }}
               >
-                <div className="text-[10px] md:text-xs text-zinc-600 mb-1">
-                  {formatDate(exp.start)} -{' '}
+                {/* 時間 */}
+                <div className="text-[10px] md:text-xs text-zinc-600 mb-1 font-medium">
+                  {formatDate(card.start)} -{' '}
                   {isPresent ? (locale === 'zh' ? '至今' : 'Present') : formatDate(endDate)}
                 </div>
-                <h3 className="font-heading text-sm md:text-base lg:text-lg font-semibold mb-0.5 md:mb-1 line-clamp-1 md:line-clamp-2">
-                  {exp.title[locale]}
+
+                {/* 職位 */}
+                <h3 className="font-heading text-xs md:text-sm font-semibold mb-1">
+                  {card.title[locale]}
                 </h3>
-                <p className="text-blue-600 font-medium text-[10px] md:text-xs lg:text-sm mb-0.5 md:mb-1 truncate">
-                  {exp.company}
-                </p>
-                <span className="inline-block text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 rounded bg-white/50 border border-current mb-1 md:mb-2">
-                  {typeLabels[exp.type][locale]}
-                </span>
-                <p className="text-zinc-700 text-[10px] md:text-xs lg:text-sm leading-relaxed line-clamp-1 md:line-clamp-2 lg:line-clamp-3">
-                  {exp.description[locale]}
-                </p>
+
+                {/* JobType 標籤 */}
+                <div className="mb-2">
+                  <span className="inline-block text-[10px] px-1.5 py-0.5 rounded bg-white/60 border border-current/30">
+                    {typeLabels[card.type][locale]}
+                  </span>
+                </div>
+
+                {/* 使用技術標籤 */}
+                <div className="flex flex-wrap gap-1">
+                  {card.technologies.map((tech, techIndex) => (
+                    <span
+                      key={`${tech}-${techIndex}`}
+                      className="inline-block text-[10px] px-1.5 py-0.5 rounded-full bg-white/80 text-zinc-700 border border-zinc-300"
+                    >
+                      {tech}
+                    </span>
+                  ))}
+                </div>
               </div>
             )
           })}
