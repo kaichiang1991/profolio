@@ -22,7 +22,7 @@ export default function Footer() {
             <GitHubIcon size={20} />
           </a>
           <a
-            href="mailto:hello@kai.dev"
+            href="mailto:addie60111@gmail.com"
             className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200"
             aria-label="Email"
           >

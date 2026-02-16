@@ -15,7 +15,7 @@ export default function Contact() {
     {
       icon: Mail,
       label: t.contact.email,
-      href: 'mailto:hello@kai.dev',
+      href: 'mailto:addie60111@gmail.com',
       description: t.contact.emailDesc,
     },
   ]
