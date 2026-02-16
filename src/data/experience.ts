@@ -52,4 +52,18 @@ export const experiences: Experience[] = [
       en: 'Developing game frontend applications with TypeScript and Cocos Creator.',
     },
   },
+  {
+    company: '遊戲公司',
+    title: {
+      zh: '前端工程師',
+      en: 'Frontend Developer',
+    },
+    start: '2021-07',
+    end: null,
+    type: 'part-time',
+    description: {
+      zh: '使用 TypeScript、Cocos Creator 開發遊戲前端應用程式、建構遊戲相關網站、配合美術開發軟體、',
+      en: 'Developing game frontend applications with TypeScript and Cocos Creator.',
+    },
+  },
 ]
