@@ -1,16 +1,18 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
-
-const links = [
-  { to: '/', label: 'Home' },
-  { to: '/projects', label: 'Projects' },
-  { to: '/experience', label: 'Experience' },
-  { to: '/contact', label: 'Contact' },
-]
+import { useLanguage } from '../i18n/index.ts'
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const { locale, setLocale, t } = useLanguage()
+
+  const links = [
+    { to: '/', label: t.nav.home },
+    { to: '/projects', label: t.nav.projects },
+    { to: '/experience', label: t.nav.experience },
+    { to: '/contact', label: t.nav.contact },
+  ]
 
   return (
     <nav className="fixed top-4 left-4 right-4 z-50 mx-auto max-w-6xl bg-white/80 backdrop-blur border border-zinc-200 rounded-full px-6 py-3">
@@ -19,7 +21,7 @@ export default function Navbar() {
           Kai
         </NavLink>
 
-        {/* Desktop links */}
+        {/* Desktop links + language toggle */}
         <div className="hidden md:flex items-center gap-8">
           {links.map(({ to, label }) => (
             <NavLink
@@ -34,6 +36,13 @@ export default function Navbar() {
               {label}
             </NavLink>
           ))}
+          <button
+            onClick={() => setLocale(locale === 'zh' ? 'en' : 'zh')}
+            className="text-sm font-medium text-zinc-500 hover:text-zinc-950 transition-colors duration-200"
+            aria-label="Toggle language"
+          >
+            {locale === 'zh' ? 'EN' : '中文'}
+          </button>
         </div>
 
         {/* Mobile hamburger */}
@@ -63,6 +72,13 @@ export default function Navbar() {
               {label}
             </NavLink>
           ))}
+          <button
+            onClick={() => { setLocale(locale === 'zh' ? 'en' : 'zh'); setOpen(false) }}
+            className="text-sm font-medium px-2 py-1 text-zinc-500 hover:text-zinc-950 transition-colors duration-200 text-left"
+            aria-label="Toggle language"
+          >
+            {locale === 'zh' ? 'EN' : '中文'}
+          </button>
         </div>
       )}
     </nav>
