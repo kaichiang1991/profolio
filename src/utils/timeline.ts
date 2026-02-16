@@ -10,6 +10,14 @@ export interface ExperienceWithLane extends Experience {
 }
 
 /**
+ * 驗證日期格式 (YYYY-MM)
+ */
+function isValidDateFormat(date: string): boolean {
+  const regex = /^\d{4}-(0[1-9]|1[0-2])$/
+  return regex.test(date)
+}
+
+/**
  * 將 'YYYY-MM' 格式的日期轉換為月份數（從 1970-01 開始）
  */
 export function dateToMonths(date: string): number {
@@ -18,11 +26,54 @@ export function dateToMonths(date: string): number {
 }
 
 /**
+ * 驗證 Experience 資料
+ */
+function validateExperience(exp: Experience): boolean {
+  // 檢查必要欄位
+  if (!exp.company || !exp.start || !exp.type) {
+    console.warn('Invalid experience: missing required fields', exp)
+    return false
+  }
+
+  // 檢查日期格式
+  if (!isValidDateFormat(exp.start)) {
+    console.warn('Invalid experience: invalid start date format', exp.start)
+    return false
+  }
+
+  if (exp.end !== null && !isValidDateFormat(exp.end)) {
+    console.warn('Invalid experience: invalid end date format', exp.end)
+    return false
+  }
+
+  // 檢查 end 不能早於 start
+  if (exp.end !== null) {
+    const startMonths = dateToMonths(exp.start)
+    const endMonths = dateToMonths(exp.end)
+    if (endMonths < startMonths) {
+      console.warn('Invalid experience: end date before start date', exp)
+      return false
+    }
+  }
+
+  return true
+}
+
+/**
+ * 過濾並驗證工作經歷資料
+ */
+export function validateExperiences(experiences: Experience[]): Experience[] {
+  return experiences.filter(validateExperience)
+}
+
+/**
  * 計算所有工作經歷的時間範圍
  * 若有 end 為 null（至今），使用當前日期
  */
 export function getTimeRange(experiences: Experience[]): TimeRange {
-  if (experiences.length === 0) {
+  const validExperiences = validateExperiences(experiences)
+
+  if (validExperiences.length === 0) {
     const now = new Date()
     const current = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
     return { start: current, end: current }
@@ -31,10 +82,10 @@ export function getTimeRange(experiences: Experience[]): TimeRange {
   const now = new Date()
   const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
 
-  let minStart = experiences[0].start
-  let maxEnd = experiences[0].end || currentDate
+  let minStart = validExperiences[0].start
+  let maxEnd = validExperiences[0].end || currentDate
 
-  experiences.forEach(exp => {
+  validExperiences.forEach(exp => {
     if (exp.start < minStart) minStart = exp.start
     const expEnd = exp.end || currentDate
     if (expEnd > maxEnd) maxEnd = expEnd
@@ -52,10 +103,15 @@ export function timeToPosition(date: string, range: TimeRange): number {
   const endMonths = dateToMonths(range.end)
 
   const totalMonths = endMonths - startMonths
-  if (totalMonths === 0) return 0
+
+  // 保護除以零
+  if (totalMonths <= 0) {
+    console.warn('Invalid time range: total months is zero or negative')
+    return 0
+  }
 
   const relativeMonths = dateMonths - startMonths
-  return (relativeMonths / totalMonths) * 100
+  return Math.max(0, Math.min(100, (relativeMonths / totalMonths) * 100))
 }
 
 /**
@@ -103,10 +159,12 @@ export function hasOverlap(exp1: Experience, exp2: Experience): boolean {
  * 返回每個工作經歷及其對應的泳道編號
  */
 export function assignLanes(experiences: Experience[]): ExperienceWithLane[] {
-  if (experiences.length === 0) return []
+  const validExperiences = validateExperiences(experiences)
+
+  if (validExperiences.length === 0) return []
 
   // 按開始時間排序（早開始的在前）
-  const sorted = [...experiences].sort((a, b) => {
+  const sorted = [...validExperiences].sort((a, b) => {
     const aMonths = dateToMonths(a.start)
     const bMonths = dateToMonths(b.start)
     return aMonths - bMonths

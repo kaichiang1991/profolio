@@ -30,6 +30,11 @@ export default function Experience() {
   const maxLane = experiencesWithLanes.reduce((max, exp) => Math.max(max, exp.lane), 0)
   const laneCount = maxLane + 1
 
+  // 警告過多泳道
+  if (laneCount > 5) {
+    console.warn(`Large number of lanes detected (${laneCount}). Consider reviewing data for better visual presentation.`)
+  }
+
   // 格式化日期
   const formatDate = (date: string) => {
     const [year, month] = date.split('-')
