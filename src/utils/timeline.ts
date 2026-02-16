@@ -81,7 +81,7 @@ export function calculatePosition(
 /**
  * 檢查兩個工作經歷的時間是否重疊
  */
-function hasOverlap(exp1: Experience, exp2: Experience): boolean {
+export function hasOverlap(exp1: Experience, exp2: Experience): boolean {
   const now = new Date()
   const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
 
