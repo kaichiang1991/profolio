@@ -60,7 +60,7 @@ export default function Experience() {
       {/* Timeline Container */}
       <div className="flex gap-4">
         {/* Year Markers Column */}
-        <div className="w-20 flex-shrink-0 relative" style={{ minHeight: '600px' }}>
+        <div className="w-12 md:w-20 flex-shrink-0 relative" style={{ minHeight: '600px' }}>
           <TimelineYearMarkers range={timeRange} />
         </div>
 
@@ -84,31 +84,34 @@ export default function Experience() {
               <div
                 key={`${exp.company}-${index}`}
                 className={`
-                  absolute rounded-lg border-l-4 shadow-md p-3 md:p-4
+                  absolute rounded-lg border-l-4 shadow-md
+                  p-2 md:p-3 lg:p-4
+                  text-xs md:text-sm
                   transition-all duration-200 hover:shadow-lg hover:scale-[1.02]
                   ${typeColors[exp.type]}
                 `}
                 style={{
                   top: `${position.top}%`,
-                  height: `${Math.max(position.height, 8)}%`,
+                  height: `${Math.max(position.height, 10)}%`,
                   left: `${leftOffset}%`,
-                  width: `calc(${laneWidth}% - 12px)`,
+                  width: `calc(${laneWidth}% - 8px)`,
+                  minWidth: laneCount > 2 ? '120px' : 'auto',
                 }}
               >
-                <div className="text-xs text-zinc-600 mb-1">
+                <div className="text-[10px] md:text-xs text-zinc-600 mb-1">
                   {formatDate(exp.start)} -{' '}
                   {isPresent ? (locale === 'zh' ? '至今' : 'Present') : formatDate(endDate)}
                 </div>
-                <h3 className="font-heading text-base md:text-lg font-semibold mb-1 line-clamp-2">
+                <h3 className="font-heading text-sm md:text-base lg:text-lg font-semibold mb-0.5 md:mb-1 line-clamp-1 md:line-clamp-2">
                   {exp.title[locale]}
                 </h3>
-                <p className="text-blue-600 font-medium text-xs md:text-sm mb-1">
+                <p className="text-blue-600 font-medium text-[10px] md:text-xs lg:text-sm mb-0.5 md:mb-1 truncate">
                   {exp.company}
                 </p>
-                <span className="inline-block text-xs px-2 py-0.5 rounded bg-white/50 border border-current mb-2">
+                <span className="inline-block text-[10px] md:text-xs px-1.5 md:px-2 py-0.5 rounded bg-white/50 border border-current mb-1 md:mb-2">
                   {typeLabels[exp.type][locale]}
                 </span>
-                <p className="text-zinc-700 text-xs md:text-sm leading-relaxed line-clamp-1 md:line-clamp-3">
+                <p className="text-zinc-700 text-[10px] md:text-xs lg:text-sm leading-relaxed line-clamp-1 md:line-clamp-2 lg:line-clamp-3">
                   {exp.description[locale]}
                 </p>
               </div>

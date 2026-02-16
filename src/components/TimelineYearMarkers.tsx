@@ -26,10 +26,10 @@ export default function TimelineYearMarkers({ range }: TimelineYearMarkersProps)
             className="absolute left-0 flex items-center"
             style={{ top: `${position}%` }}
           >
-            <span className="text-sm font-medium text-zinc-600 mr-2">
+            <span className="text-xs md:text-sm font-medium text-zinc-600 mr-1 md:mr-2">
               {year}
             </span>
-            <div className="w-2 h-px bg-zinc-300" />
+            <div className="w-1 md:w-2 h-px bg-zinc-300" />
           </div>
         )
       })}
