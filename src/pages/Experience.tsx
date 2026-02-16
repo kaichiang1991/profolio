@@ -6,13 +6,6 @@ import {
 } from '../utils/timeline.ts'
 import TimelineYearMarkers from '../components/TimelineYearMarkers.tsx'
 
-const typeColors: Record<JobType, string> = {
-  'full-time': 'border-l-blue-600 bg-blue-50',
-  'part-time': 'border-l-green-600 bg-green-50',
-  'freelance': 'border-l-purple-600 bg-purple-50',
-  'contract': 'border-l-orange-600 bg-orange-50',
-}
-
 const typeLabels: Record<JobType, { zh: string; en: string }> = {
   'full-time': { zh: '全職', en: 'Full-time' },
   'part-time': { zh: '兼職', en: 'Part-time' },
@@ -169,6 +162,19 @@ export default function Experience() {
             const isPresent = card.end === null
             const endDate = card.end || currentDate
 
+            // 為每個工作經歷分配對應的顏色（與矩形條相同）
+            const cardColors = [
+              'border-l-blue-600 bg-blue-50',
+              'border-l-green-600 bg-green-50',
+              'border-l-purple-600 bg-purple-50',
+              'border-l-orange-600 bg-orange-50',
+              'border-l-pink-600 bg-pink-50',
+              'border-l-teal-600 bg-teal-50',
+              'border-l-indigo-600 bg-indigo-50',
+              'border-l-yellow-600 bg-yellow-50',
+            ]
+            const cardColor = cardColors[index % cardColors.length]
+
             return (
               <div
                 key={`${card.company}-${index}`}
@@ -177,7 +183,7 @@ export default function Experience() {
                   p-3 md:p-4
                   text-xs
                   transition-all duration-200 hover:shadow-md
-                  ${typeColors[card.type]}
+                  ${cardColor}
                 `}
                 style={{
                   top: `${card.cardTop}px`,
