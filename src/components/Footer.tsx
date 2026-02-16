@@ -13,7 +13,7 @@ export default function Footer() {
         </p>
         <div className="flex items-center gap-4">
           <a
-            href="https://github.com/kai"
+            href="https://github.com/kaichiang1991"
             target="_blank"
             rel="noopener noreferrer"
             className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200"

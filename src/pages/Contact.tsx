@@ -9,7 +9,7 @@ export default function Contact() {
     {
       icon: GitHubIcon,
       label: t.contact.github,
-      href: 'https://github.com/kai',
+      href: 'https://github.com/kaichiang1991',
       description: t.contact.githubDesc,
     },
     {

@@ -34,7 +34,7 @@ export default function Home() {
 
         <div className="flex flex-wrap gap-4">
           <a
-            href="https://github.com/kai"
+            href="https://github.com/kaichiang1991"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-zinc-950 text-white rounded-full px-6 py-3 text-sm font-medium hover:bg-zinc-800 transition-colors duration-200"
