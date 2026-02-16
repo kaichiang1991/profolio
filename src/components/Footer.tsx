@@ -1,11 +1,14 @@
 import { Github, Mail } from 'lucide-react'
+import { useLanguage } from '../i18n/index.ts'
 
 export default function Footer() {
+  const { t } = useLanguage()
+
   return (
     <footer className="border-t border-zinc-200 py-8 mt-20">
       <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p className="text-sm text-zinc-500">
-          &copy; {new Date().getFullYear()} Kai. All rights reserved.
+          &copy; {new Date().getFullYear()} Kai. {t.footer.rights}.
         </p>
         <div className="flex items-center gap-4">
           <a
