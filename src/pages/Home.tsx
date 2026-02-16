@@ -2,8 +2,8 @@ import GitHubIcon from '../components/GitHubIcon.tsx'
 import { useLanguage } from '../i18n/index.ts'
 
 const skills = [
-  'TypeScript', 'React', 'Node.js', 'Next.js',
-  'Tailwind CSS', 'PostgreSQL', 'Docker', 'AWS',
+  'TypeScript', 'React', 'Node.js', 'Next.js', 'NestJS',
+  'Tailwind CSS', 'PostgreSQL', 'Docker', 'Claude Code',
 ]
 
 export default function Home() {
