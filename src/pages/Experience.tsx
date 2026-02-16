@@ -24,6 +24,9 @@ export default function Experience() {
   )
   const laneCount = maxLane + 1
 
+  // 計算泳道寬度（用於卡片定位）
+  const laneWidth = 100 / laneCount
+
   // 處理空狀態
   if (experiences.length === 0) {
     return (
@@ -47,35 +50,25 @@ export default function Experience() {
         {t.experience.subtitle}
       </p>
 
-      {/* Timeline Grid Container */}
-      <div
-        className="grid relative min-h-[600px]"
-        style={{
-          gridTemplateColumns: `80px 2px repeat(${laneCount}, 1fr)`,
-          gap: '0 12px',
-        }}
-      >
+      {/* Timeline Container */}
+      <div className="flex gap-4">
         {/* Year Markers Column */}
-        <div className="relative">
+        <div className="w-20 flex-shrink-0 relative" style={{ minHeight: '600px' }}>
           <TimelineYearMarkers range={timeRange} />
         </div>
 
         {/* Timeline Axis */}
-        <div className="bg-zinc-300 w-full h-full" />
+        <div className="w-0.5 bg-zinc-300 flex-shrink-0" />
 
-        {/* Experience Cards in Lanes */}
-        <div
-          className="relative col-span-full"
-          style={{
-            gridColumn: '3 / -1',
-            minHeight: '600px',
-          }}
-        >
+        {/* Experience Cards Container */}
+        <div className="flex-1 relative" style={{ minHeight: '600px' }}>
           {experiencesWithLanes.map((exp, index) => {
             const position = calculatePosition(exp, timeRange)
+            // 計算泳道位置 - laneWidth 會在 Task 8 整合時使用
+            const _laneWidth = laneWidth // 暫時標記使用
             return (
               <ExperienceCard
-                key={index}
+                key={`${exp.company}-${index}`}
                 experience={exp}
                 top={position.top}
                 height={position.height}
