@@ -1,0 +1,39 @@
+import type { Translations } from './types.ts'
+
+const zh: Translations = {
+  nav: {
+    home: '首頁',
+    projects: '作品集',
+    experience: '經歷',
+    contact: '聯繫',
+  },
+  hero: {
+    greeting: '嗨，我是 Kai',
+    subtitle: '專注於 TypeScript 的全端開發者。我使用現代工具與最佳實踐，打造乾淨且高效能的網頁應用程式。',
+    viewProjects: '查看作品',
+    github: 'GitHub',
+  },
+  projects: {
+    title: '作品集',
+    subtitle: '我建構和參與的精選專案。',
+    code: '程式碼',
+    demo: '展示',
+  },
+  experience: {
+    title: '經歷',
+    subtitle: '我的專業旅程。',
+  },
+  contact: {
+    title: '聯繫',
+    subtitle: '歡迎與我聯繫，我隨時樂於接受新的機會與合作。',
+    github: 'GitHub',
+    githubDesc: '查看我的開源作品',
+    email: 'Email',
+    emailDesc: '直接與我聯繫',
+  },
+  footer: {
+    rights: '版權所有',
+  },
+}
+
+export default zh
