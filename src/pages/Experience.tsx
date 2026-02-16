@@ -143,7 +143,7 @@ export default function Experience() {
                   `}
                   style={{
                     top: `${card.barTop}px`,
-                    left: '16px', // 固定在時間線右邊
+                    left: `${16 + card.lane * (barWidth + 10)}px`, // 根據 lane 排列，避免時間重疊
                     width: `${barWidth}px`,
                     height: `${card.barHeight}px`,
                   }}
