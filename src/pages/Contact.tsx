@@ -1,4 +1,5 @@
-import { Github, Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
+import GitHubIcon from '../components/GitHubIcon.tsx'
 import { useLanguage } from '../i18n/index.ts'
 
 export default function Contact() {
@@ -6,7 +7,7 @@ export default function Contact() {
 
   const contacts = [
     {
-      icon: Github,
+      icon: GitHubIcon,
       label: t.contact.github,
       href: 'https://github.com/kai',
       description: t.contact.githubDesc,

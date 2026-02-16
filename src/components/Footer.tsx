@@ -1,4 +1,5 @@
-import { Github, Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
+import GitHubIcon from './GitHubIcon.tsx'
 import { useLanguage } from '../i18n/index.ts'
 
 export default function Footer() {
@@ -18,7 +19,7 @@ export default function Footer() {
             className="text-zinc-500 hover:text-zinc-950 transition-colors duration-200"
             aria-label="GitHub"
           >
-            <Github size={20} />
+            <GitHubIcon size={20} />
           </a>
           <a
             href="mailto:hello@kai.dev"

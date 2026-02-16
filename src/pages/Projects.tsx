@@ -1,4 +1,5 @@
-import { ExternalLink, Github } from 'lucide-react'
+import { ExternalLink } from 'lucide-react'
+import GitHubIcon from '../components/GitHubIcon.tsx'
 import { useLanguage } from '../i18n/index.ts'
 import { projects } from '../data/projects.ts'
 
@@ -43,7 +44,7 @@ export default function Projects() {
                   className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-950 transition-colors duration-200"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <Github size={16} />
+                  <GitHubIcon size={16} />
                   {t.projects.code}
                 </a>
               )}
