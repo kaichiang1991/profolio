@@ -1,7 +1,11 @@
+export type JobType = 'full-time' | 'part-time' | 'freelance' | 'contract'
+
 export interface Experience {
   company: string
   title: { zh: string; en: string }
-  period: string
+  start: string  // 格式：'YYYY-MM'
+  end: string | null  // 'YYYY-MM' 或 null（表示至今）
+  type: JobType
   description: { zh: string; en: string }
 }
 
@@ -12,7 +16,9 @@ export const experiences: Experience[] = [
       zh: '遊戲前端工程師',
       en: 'Game Frontend Developer',
     },
-    period: '2016/12 - 2019/5',
+    start: '2016-12',
+    end: '2019-05',
+    type: 'full-time',
     description: {
       zh: '使用 TypeScript、Cocos Creator 開發遊戲前端應用程式。',
       en: 'Developing game frontend applications with TypeScript and Cocos Creator.',
@@ -24,7 +30,9 @@ export const experiences: Experience[] = [
       zh: '遊戲前端工程師',
       en: 'Game Frontend Developer',
     },
-    period: '2019/10 - 2021/3',
+    start: '2019-10',
+    end: '2021-03',
+    type: 'full-time',
     description: {
       zh: '使用 TypeScript、Cocos Creator 開發遊戲前端應用程式。',
       en: 'Developing game frontend applications with TypeScript and Cocos Creator.',
@@ -36,7 +44,9 @@ export const experiences: Experience[] = [
       zh: '前端工程師',
       en: 'Frontend Developer',
     },
-    period: '2021/3 - 2021/10',
+    start: '2021-03',
+    end: '2021-10',
+    type: 'full-time',
     description: {
       zh: '使用 TypeScript、Cocos Creator 開發遊戲前端應用程式、建構遊戲相關網站、配合美術開發軟體、',
       en: 'Developing game frontend applications with TypeScript and Cocos Creator.',
