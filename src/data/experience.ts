@@ -7,15 +7,39 @@ export interface Experience {
 
 export const experiences: Experience[] = [
   {
-    company: 'Company Name',
+    company: '永勝雲端',
     title: {
-      zh: '全端工程師',
-      en: 'Full-Stack Developer',
+      zh: '遊戲前端工程師',
+      en: 'Game Frontend Developer',
     },
-    period: '2024 - Present',
+    period: '2016/12 - 2019/5',
     description: {
-      zh: '使用 TypeScript、React 和 Node.js 開發網頁應用程式。',
-      en: 'Building web applications with TypeScript, React, and Node.js.',
+      zh: '使用 TypeScript、Cocos Creator 開發遊戲前端應用程式。',
+      en: 'Developing game frontend applications with TypeScript and Cocos Creator.',
+    },
+  },
+  {
+    company: '微微一笑國際股份有限公司',
+    title: {
+      zh: '遊戲前端工程師',
+      en: 'Game Frontend Developer',
+    },
+    period: '2019/10 - 2021/3',
+    description: {
+      zh: '使用 TypeScript、Cocos Creator 開發遊戲前端應用程式。',
+      en: 'Developing game frontend applications with TypeScript and Cocos Creator.',
+    },
+  },
+  {
+    company: '遊戲公司',
+    title: {
+      zh: '前端工程師',
+      en: 'Frontend Developer',
+    },
+    period: '2021/3 - 2021/10',
+    description: {
+      zh: '使用 TypeScript、Cocos Creator 開發遊戲前端應用程式、建構遊戲相關網站、配合美術開發軟體、',
+      en: 'Developing game frontend applications with TypeScript and Cocos Creator.',
     },
   },
 ]
