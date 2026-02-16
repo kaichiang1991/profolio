@@ -63,13 +63,29 @@ export default function Experience() {
   const laneBottoms: number[] = []
 
   const cardsWithPosition = sortedExperiences.map((exp) => {
-    const position = calculatePosition(
+    // 計算 start 位置
+    const startPosition = calculatePosition(
       { start: exp.start, end: exp.start } as any,
       timeRange
     )
 
+    // 計算 end 位置（如果是進行中則使用當前日期）
+    const now = new Date()
+    const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+    const endDate = exp.end || currentDate
+    const endPosition = calculatePosition(
+      { start: endDate, end: endDate } as any,
+      timeRange
+    )
+
+    // 矩形條的高度 = end 位置 - start 位置
+    const barHeight = Math.max(
+      ((endPosition.top - startPosition.top) / 100) * timelineHeight,
+      minBarHeight
+    )
+
     // 卡片的 Y 位置 = start 時間在時間軸上的位置（頂部對齊）
-    const cardY = (position.top / 100) * timelineHeight
+    const cardY = (startPosition.top / 100) * timelineHeight
     const cardBottom = cardY + cardHeight + cardPadding
 
     // 找到第一個不會重疊的 lane
@@ -83,9 +99,11 @@ export default function Experience() {
 
     return {
       ...exp,
-      timelinePosition: position.top, // 在時間軸上的位置（%）
-      cardTop: cardY, // 卡片的實際位置（px），與時間軸位置對齊
-      lane, // 動態分配的 lane，避免重疊
+      timelinePosition: startPosition.top, // 在時間軸上的位置（%）
+      cardTop: cardY, // 卡片的實際位置（px）
+      barTop: cardY, // 矩形條的頂部位置（px）
+      barHeight, // 矩形條的高度（px）
+      lane, // 動態分配的 lane
     }
   })
 
