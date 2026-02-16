@@ -126,6 +126,37 @@ export default function Experience() {
         {/* Timeline Axis */}
         <div className="w-0.5 bg-zinc-300 shrink-0 relative" style={{ minHeight: `${timelineHeight}px` }} />
 
+        {/* Bar Layer */}
+        <div className="absolute left-0 top-0 pointer-events-none" style={{ width: '100%', minHeight: `${timelineHeight}px` }}>
+          <div className="relative" style={{ marginLeft: '52px', minHeight: `${timelineHeight}px` }}>
+            {cardsWithPosition.map((card, index) => {
+              const barColors: Record<JobType, string> = {
+                'full-time': 'bg-blue-500',
+                'part-time': 'bg-green-500',
+                'freelance': 'bg-purple-500',
+                'contract': 'bg-orange-500',
+              }
+
+              return (
+                <div
+                  key={`bar-${card.company}-${card.start}-${index}`}
+                  className={`
+                    absolute rounded opacity-80
+                    ${barColors[card.type]}
+                  `}
+                  style={{
+                    top: `${card.barTop}px`,
+                    left: `${card.lane * laneWidth + 16}px`, // 16px = gap after timeline
+                    width: `${barWidth}px`,
+                    height: `${card.barHeight}px`,
+                  }}
+                  title={`${card.title[locale]} (${formatDate(card.start)} - ${card.end ? formatDate(card.end) : locale === 'zh' ? '至今' : 'Present'})`}
+                />
+              )
+            })}
+          </div>
+        </div>
+
         {/* SVG Layer for connecting lines */}
         <svg
           className="absolute left-0 top-0 pointer-events-none"
