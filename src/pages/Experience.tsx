@@ -60,7 +60,7 @@ export default function Experience() {
       {/* Timeline Container */}
       <div className="flex gap-4">
         {/* Year Markers Column */}
-        <div className="w-12 md:w-20 flex-shrink-0 relative" style={{ minHeight: '600px' }}>
+        <div className="w-12 md:w-20 flex-shrink-0 relative" style={{ minHeight: '1200px' }}>
           <TimelineYearMarkers range={timeRange} />
         </div>
 
@@ -68,7 +68,7 @@ export default function Experience() {
         <div className="w-0.5 bg-zinc-300 flex-shrink-0" />
 
         {/* Experience Cards Container */}
-        <div className="flex-1 relative" style={{ minHeight: '600px' }}>
+        <div className="flex-1 relative" style={{ minHeight: '1200px' }}>
           {experiencesWithLanes.map((exp, index) => {
             const position = calculatePosition(exp, timeRange)
             const now = new Date()
@@ -77,8 +77,14 @@ export default function Experience() {
             const endDate = exp.end || currentDate
 
             // 計算泳道位置
-            const laneWidth = 100 / laneCount
+            // 預設最少按 3 個 lane 的寬度計算，超過則按實際數量
+            const minLanes = 3
+            const effectiveLaneCount = Math.max(laneCount, minLanes)
+            const laneWidth = 100 / effectiveLaneCount
             const leftOffset = exp.lane * laneWidth
+
+            // 為緊鄰的工作預留間隙（減少 2% 高度作為視覺間距）
+            const adjustedHeight = Math.max(position.height - 2, 8)
 
             return (
               <div
@@ -92,10 +98,10 @@ export default function Experience() {
                 `}
                 style={{
                   top: `${position.top}%`,
-                  height: `${Math.max(position.height, 10)}%`,
-                  left: `${leftOffset}%`,
-                  width: `calc(${laneWidth}% - 8px)`,
-                  minWidth: laneCount > 2 ? '120px' : 'auto',
+                  minHeight: `${Math.max(adjustedHeight, 10)}%`,
+                  left: `calc(${leftOffset}% + 8px)`,
+                  width: `calc(${laneWidth}% - 24px)`,
+                  minWidth: effectiveLaneCount > 2 ? '150px' : 'auto',
                 }}
               >
                 <div className="text-[10px] md:text-xs text-zinc-600 mb-1">
