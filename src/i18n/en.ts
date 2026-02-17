@@ -19,6 +19,8 @@ const en: Translations = {
     subtitle: "A selection of projects I've built and contributed to.",
     code: 'Code',
     demo: 'Demo',
+    all: 'All',
+    noResults: 'No projects using this technology',
   },
   experience: {
     title: 'Experience',

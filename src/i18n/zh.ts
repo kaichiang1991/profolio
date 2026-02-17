@@ -19,6 +19,8 @@ const zh: Translations = {
     subtitle: '我建構和參與的精選專案。',
     code: '程式碼',
     demo: '展示',
+    all: '全部',
+    noResults: '沒有使用此技術的專案',
   },
   experience: {
     title: '經歷',

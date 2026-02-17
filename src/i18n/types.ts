@@ -18,6 +18,8 @@ export interface Translations {
     subtitle: string
     code: string
     demo: string
+    all: string
+    noResults: string
   }
   experience: {
     title: string
