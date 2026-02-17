@@ -1,3 +1,4 @@
+import React from 'react'
 import { useLanguage } from '../i18n/index.ts'
 import { experiences, type JobType } from '../data/experience.ts'
 import {
@@ -13,8 +14,37 @@ const typeLabels: Record<JobType, { zh: string; en: string }> = {
   'contract': { zh: '合約', en: 'Contract' },
 }
 
+/**
+ * 獲取當前日期（YYYY-MM 格式）
+ * 用於處理進行中的工作（end: null）
+ */
+const getCurrentDate = (): string => {
+  const now = new Date()
+  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+}
+
 export default function Experience() {
   const { locale, t } = useLanguage()
+
+  // 響應式佈局 Hook
+  const [windowWidth, setWindowWidth] = React.useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1024
+  )
+
+  React.useEffect(() => {
+    const handleResize = () => setWindowWidth(window.innerWidth)
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const isMobile = windowWidth < 640    // sm
+  const isTablet = windowWidth < 768    // md
+
+  const responsiveLayout = {
+    laneWidth: isMobile ? 200 : isTablet ? 220 : 250,
+    barWidth: isMobile ? 25 : 10,
+    cardWidth: isMobile ? 180 : isTablet ? 200 : 230,
+  }
 
   // 處理空狀態
   if (experiences.length === 0) {
@@ -37,13 +67,14 @@ export default function Experience() {
     return `${year}/${month}`
   }
 
-  // 計算每個經歷的位置
-  const cardHeight = 140 // 每個卡片的高度（px）
-  const laneWidth = 250 // 每個 lane 的寬度（px）- 縮小卡片間距
-  const barWidth = 10 // 矩形條的寬度（px）
-  const timelineHeight = 1200 // 時間軸的總高度（px）
-  const cardPadding = 10 // 卡片之間的垂直間距（px）
-  const minBarHeight = 20 // 矩形條的最小高度（px）
+  // 計算每個經歷的位置（使用響應式佈局）
+  const cardHeight = 140
+  const laneWidth = responsiveLayout.laneWidth
+  const barWidth = responsiveLayout.barWidth
+  const cardWidth = responsiveLayout.cardWidth
+  const timelineHeight = 1200
+  const cardPadding = 10
+  const minBarHeight = 20
 
   // 按 start 時間排序所有經歷
   const sortedExperiences = [...experiences].sort((a, b) =>
@@ -54,22 +85,18 @@ export default function Experience() {
   const laneBottoms: number[] = []
 
   const cardsWithPosition = sortedExperiences.map((exp) => {
-    // 計算 start 位置
-    const startPosition = calculatePosition(
-      { start: exp.start, end: exp.start } as any,
-      timeRange
-    )
+    // 計算 start 位置（直接傳遞 exp，calculatePosition 已支援 Experience 類型）
+    const startPosition = calculatePosition(exp, timeRange)
 
     // 計算 end 位置（如果是進行中則使用當前日期）
-    const now = new Date()
-    const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
-    const endDate = exp.end || currentDate
+    const endDate = exp.end || getCurrentDate()
     const endPosition = calculatePosition(
-      { start: endDate, end: endDate } as any,
+      { ...exp, start: endDate, end: endDate },
       timeRange
     )
 
-    // 矩形條的高度 = end 位置 - start 位置
+    // 矩形條的高度對應工作時間跨度（end - start）
+    // 使用 minBarHeight 確保超短期工作（<2個月）仍可見
     const barHeight = Math.max(
       ((endPosition.top - startPosition.top) / 100) * timelineHeight,
       minBarHeight
@@ -79,7 +106,9 @@ export default function Experience() {
     const cardY = (startPosition.top / 100) * timelineHeight
     const cardBottom = cardY + cardHeight + cardPadding
 
-    // 找到第一個不會重疊的 lane
+    // Lane 分配算法：找到第一個可用的 lane
+    // 「可用」定義：該 lane 最後一個卡片的底部 ≤ 當前卡片的頂部
+    // 這確保卡片不會在視覺上重疊
     let lane = 0
     while (lane < laneBottoms.length && laneBottoms[lane] > cardY) {
       lane++
@@ -104,7 +133,7 @@ export default function Experience() {
   const barsWidth = (maxLane + 1) * (barWidth + 10) // +1 因為 lane 從 0 開始
 
   return (
-    <main className="max-w-6xl mx-auto px-6 py-20">
+    <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
       <h1 className="font-heading text-4xl md:text-5xl font-bold tracking-tight mb-4">
         {t.experience.title}
       </h1>
@@ -112,8 +141,8 @@ export default function Experience() {
         {t.experience.subtitle}
       </p>
 
-      {/* Timeline Container */}
-      <div className="flex gap-4 relative">
+      {/* Timeline Container - 小屏幕支援橫向滾動 */}
+      <div className="flex gap-2 md:gap-4 relative overflow-x-auto md:overflow-x-visible pb-4">
         {/* Year Markers Column */}
         <div className="w-12 md:w-20 shrink-0 relative" style={{ minHeight: `${timelineHeight}px` }}>
           <TimelineYearMarkers range={timeRange} />
@@ -147,7 +176,8 @@ export default function Experience() {
                   `}
                   style={{
                     top: `${card.barTop}px`,
-                    right: `${(maxLane - card.lane) * (barWidth + 10)}px`, // 反轉順序：Lane 0 最左邊
+                    // 矩形條從左到右順序：Lane 0（最左）到 Lane maxLane（最右，緊貼時間線）
+                    right: `${(maxLane - card.lane) * (barWidth + 10)}px`,
                     width: `${barWidth}px`,
                     height: `${card.barHeight}px`,
                   }}
@@ -163,8 +193,7 @@ export default function Experience() {
         {/* Experience Cards Container */}
         <div className="flex-1 relative pl-4" style={{ minHeight: `${timelineHeight}px` }}>
           {cardsWithPosition.map((card, index) => {
-            const now = new Date()
-            const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
+            const currentDate = getCurrentDate()
             const isPresent = card.end === null
             const endDate = card.end || currentDate
 
@@ -194,7 +223,7 @@ export default function Experience() {
                 style={{
                   top: `${card.cardTop}px`,
                   left: `${card.lane * laneWidth}px`,
-                  width: '230px',
+                  width: `${cardWidth}px`, // 使用響應式寬度
                   minHeight: `${cardHeight}px`,
                 }}
               >
