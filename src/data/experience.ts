@@ -57,7 +57,7 @@ export const experiences: Experience[] = [
     technologies: ['TypeScript', 'PixiJS', 'React', 'Next.js'],
   },
   {
-    company: '網站公司',
+    company: '網站公司', // KG
     title: {
       zh: '全端工程師',
       en: 'Fullstack Developer',
@@ -69,10 +69,10 @@ export const experiences: Experience[] = [
       zh: 'H5遊戲開發、網站開發、網站後端管理、資料庫管理、網站維運',
       en: 'Developing H5 games, website development, website backend management, database management, website maintenance.',
     },
-    technologies: ['Node.js', 'React', 'MySQL', 'Docker', 'Linux'],
+    technologies: ['Laravel', 'php', 'MySQL', 'Vue', 'Next.js'],
   },
   {
-    company: '接案',
+    company: '接案', // party game
     title: {
       zh: '後端工程師',
       en: 'backend Developer',
@@ -84,21 +84,66 @@ export const experiences: Experience[] = [
       zh: 'Node.js後端開發',
       en: 'Developing backend applications with Node.js.',
     },
-    technologies: ['Node.js', 'Express', 'MongoDB'],
+    technologies: ['Node.js', 'Express', 'MySQL', 'webSocket'],
   },
   {
-    company: '接案',
+    company: 'KD', // KD
     title: {
       zh: '全端工程師',
       en: 'Fullstack Developer',
     },
-    start: '2021-08',
-    end: null,
+    start: '2021-11',
+    end: '2022-06',
     type: 'freelance',
     description: {
-      zh: 'Node.js後端開發',
+      zh: '網站維護、新增修改部分功能',
+      en: 'Website maintenance, new feature development.',
+    },
+    technologies: ['Laravel', 'MySQL', 'Vue'],
+  },
+  {
+    company: '接案公司', // 遠山創品
+    title: {
+      zh: '全端工程師',
+      en: 'Fullstack Developer',
+    },
+    start: '2024-09',
+    end: '2025-11',
+    type: 'freelance',
+    description: {
+      zh: '網站維護、新增修改部分功能',
+      en: 'Website maintenance, new feature development.',
+    },
+    technologies: ['React', 'Loopback 4', 'Liff'],
+  },
+  {
+    company: '布穀町',
+    title: {
+      zh: '全端工程師',
+      en: 'Fullstack Developer',
+    },
+    start: '2023-12',
+    end: '2026-02',
+    type: 'freelance',
+    description: {
+      zh: '',
       en: 'Developing backend applications with Node.js.',
     },
-    technologies: ['Node.js', 'React', 'TypeScript', 'PostgreSQL'],
+    technologies: ['React', 'Next.js', 'TypeScript', 'PostgreSQL'],
+  },
+  {
+    company: '遊戲幣',
+    title: {
+      zh: '全端工程師',
+      en: 'Fullstack Developer',
+    },
+    start: '2024-10',
+    end: '2026-02',
+    type: 'freelance',
+    description: {
+      zh: '',
+      en: 'Developing backend applications with Node.js.',
+    },
+    technologies: ['React', 'Next.js', 'TypeScript', 'PostgreSQL'],
   },
 ]
