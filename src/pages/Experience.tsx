@@ -118,9 +118,8 @@ export default function Experience() {
         <div className="w-0.5 bg-zinc-300 shrink-0 relative" style={{ minHeight: `${timelineHeight}px` }} />
 
         {/* Bar Layer */}
-        <div className="absolute left-0 top-0 pointer-events-none" style={{ width: '100%', minHeight: `${timelineHeight}px` }}>
-          <div className="relative" style={{ marginLeft: '52px', minHeight: `${timelineHeight}px` }}>
-            {cardsWithPosition.map((card, index) => {
+        <div className="relative shrink-0 pointer-events-none" style={{ width: '0px', minHeight: `${timelineHeight}px` }}>
+          {cardsWithPosition.map((card, index) => {
               // 為每個工作經歷分配不同顏色
               const colors = [
                 'bg-blue-500',
@@ -151,7 +150,6 @@ export default function Experience() {
                 />
               )
             })}
-          </div>
         </div>
 
         {/* Experience Cards Container */}
