@@ -4,6 +4,7 @@ import { experiences, type JobType } from '../data/experience.ts'
 import {
   getTimeRange,
   calculatePosition,
+  assignLanes,
 } from '../utils/timeline.ts'
 import TimelineYearMarkers from '../components/TimelineYearMarkers.tsx'
 
@@ -73,18 +74,12 @@ export default function Experience() {
   const barWidth = responsiveLayout.barWidth
   const cardWidth = responsiveLayout.cardWidth
   const timelineHeight = 1200
-  const cardPadding = 10
   const minBarHeight = 20
 
-  // 按 start 時間排序所有經歷
-  const sortedExperiences = [...experiences].sort((a, b) =>
-    a.start.localeCompare(b.start)
-  )
+  // 使用基於時間範圍的 lane 分配（確保矩形條不會在時間上重疊）
+  const experiencesWithLanes = assignLanes(experiences)
 
-  // 追蹤每個 lane 的最後一張卡片的底部位置
-  const laneBottoms: number[] = []
-
-  const cardsWithPosition = sortedExperiences.map((exp) => {
+  const cardsWithPosition = experiencesWithLanes.map((exp) => {
     // 計算 start 位置（直接傳遞 exp，calculatePosition 已支援 Experience 類型）
     const startPosition = calculatePosition(exp, timeRange)
 
@@ -104,18 +99,6 @@ export default function Experience() {
 
     // 卡片的 Y 位置 = start 時間在時間軸上的位置（頂部對齊）
     const cardY = (startPosition.top / 100) * timelineHeight
-    const cardBottom = cardY + cardHeight + cardPadding
-
-    // Lane 分配算法：找到第一個可用的 lane
-    // 「可用」定義：該 lane 最後一個卡片的底部 ≤ 當前卡片的頂部
-    // 這確保卡片不會在視覺上重疊
-    let lane = 0
-    while (lane < laneBottoms.length && laneBottoms[lane] > cardY) {
-      lane++
-    }
-
-    // 更新這個 lane 的底部位置
-    laneBottoms[lane] = cardBottom
 
     return {
       ...exp,
@@ -123,7 +106,7 @@ export default function Experience() {
       cardTop: cardY, // 卡片的實際位置（px）
       barTop: cardY, // 矩形條的頂部位置（px）
       barHeight, // 矩形條的高度（px）
-      lane, // 動態分配的 lane
+      // lane 已經由 assignLanes 根據時間重疊情況分配
     }
   })
 
@@ -218,6 +201,7 @@ export default function Experience() {
                   p-3 md:p-4
                   text-xs
                   transition-all duration-200 hover:shadow-md
+                  hover:z-10 active:z-10 cursor-pointer
                   ${cardColor}
                 `}
                 style={{
