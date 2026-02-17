@@ -143,7 +143,7 @@ export default function Experience() {
                   `}
                   style={{
                     top: `${card.barTop}px`,
-                    right: `${card.lane * (barWidth + 10)}px`, // 在時間線左邊，Lane 0 緊貼時間線
+                    left: `${card.lane * (barWidth + 10)}px`, // 在時間線右邊，Lane 0 緊貼時間線
                     width: `${barWidth}px`,
                     height: `${card.barHeight}px`,
                   }}
