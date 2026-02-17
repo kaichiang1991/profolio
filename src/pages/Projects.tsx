@@ -21,7 +21,9 @@ export default function Projects() {
             key={project.title[locale]}
             className="bg-white rounded-2xl border border-zinc-200 p-6 hover:border-blue-600 transition-colors duration-200 cursor-pointer flex flex-col gap-4"
           >
-            <h2 className="font-heading text-xl font-semibold">{project.title[locale]}</h2>
+            <h2 className="font-heading text-xl font-semibold">
+              {project.title[locale]}
+            </h2>
             <p className="text-zinc-700 text-sm leading-relaxed flex-1">
               {project.description[locale]}
             </p>

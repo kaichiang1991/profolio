@@ -17,7 +17,11 @@ export default function Navbar() {
   return (
     <nav className="fixed top-4 left-4 right-4 z-50 mx-auto max-w-6xl bg-white/80 backdrop-blur border border-zinc-200 rounded-full px-6 py-3">
       <div className="flex items-center justify-between">
-        <NavLink to="/" className="font-heading text-lg font-bold tracking-tight" onClick={() => setOpen(false)}>
+        <NavLink
+          to="/"
+          className="font-heading text-lg font-bold tracking-tight"
+          onClick={() => setOpen(false)}
+        >
           Kai
         </NavLink>
 
@@ -29,7 +33,9 @@ export default function Navbar() {
               to={to}
               className={({ isActive }) =>
                 `text-sm font-medium transition-colors duration-200 ${
-                  isActive ? 'text-zinc-950' : 'text-zinc-500 hover:text-zinc-950'
+                  isActive
+                    ? 'text-zinc-950'
+                    : 'text-zinc-500 hover:text-zinc-950'
                 }`
               }
             >
@@ -64,7 +70,9 @@ export default function Navbar() {
               to={to}
               className={({ isActive }) =>
                 `text-sm font-medium px-2 py-1 transition-colors duration-200 ${
-                  isActive ? 'text-zinc-950' : 'text-zinc-500 hover:text-zinc-950'
+                  isActive
+                    ? 'text-zinc-950'
+                    : 'text-zinc-500 hover:text-zinc-950'
                 }`
               }
               onClick={() => setOpen(false)}
@@ -73,7 +81,10 @@ export default function Navbar() {
             </NavLink>
           ))}
           <button
-            onClick={() => { setLocale(locale === 'zh' ? 'en' : 'zh'); setOpen(false) }}
+            onClick={() => {
+              setLocale(locale === 'zh' ? 'en' : 'zh')
+              setOpen(false)
+            }}
             className="text-sm font-medium px-2 py-1 text-zinc-500 hover:text-zinc-950 transition-colors duration-200 text-left"
             aria-label="Toggle language"
           >

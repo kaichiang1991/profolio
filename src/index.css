@@ -1,8 +1,8 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @theme {
-  --font-heading: "Space Grotesk", sans-serif;
-  --font-body: "Archivo", sans-serif;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Archivo', sans-serif;
 }
 
 body {
@@ -14,7 +14,12 @@ body {
   min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   line-height: 1.2;
 }

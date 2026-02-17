@@ -57,7 +57,10 @@ export default function Contact() {
             className="flex items-center gap-4 bg-white rounded-2xl border border-zinc-200 p-5 hover:border-blue-600 transition-colors duration-200 group relative"
           >
             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-zinc-100 group-hover:bg-blue-50 transition-colors duration-200">
-              <Icon size={20} className="text-zinc-700 group-hover:text-blue-600 transition-colors duration-200" />
+              <Icon
+                size={20}
+                className="text-zinc-700 group-hover:text-blue-600 transition-colors duration-200"
+              />
             </div>
             <div className="flex-1">
               <p className="font-medium text-sm">{label}</p>

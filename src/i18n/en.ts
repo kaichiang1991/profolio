@@ -9,7 +9,8 @@ const en: Translations = {
   },
   hero: {
     greeting: "Hi, I'm Kai",
-    subtitle: 'Full-stack developer specializing in TypeScript. I build clean, performant web applications with modern tools and best practices.',
+    subtitle:
+      'Full-stack developer specializing in TypeScript. I build clean, performant web applications with modern tools and best practices.',
     viewProjects: 'View Projects',
     github: 'GitHub',
   },
@@ -25,7 +26,8 @@ const en: Translations = {
   },
   contact: {
     title: 'Contact',
-    subtitle: "Feel free to reach out. I'm always open to new opportunities and collaborations.",
+    subtitle:
+      "Feel free to reach out. I'm always open to new opportunities and collaborations.",
     github: 'GitHub',
     githubDesc: 'Check out my open source work',
     email: 'Email',

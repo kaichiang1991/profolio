@@ -1,4 +1,10 @@
-export default function GitHubIcon({ size = 20, className = '' }: { size?: number; className?: string }) {
+export default function GitHubIcon({
+  size = 20,
+  className = '',
+}: {
+  size?: number
+  className?: string
+}) {
   return (
     <svg
       width={size}

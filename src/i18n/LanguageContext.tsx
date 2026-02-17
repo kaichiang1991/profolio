@@ -1,4 +1,10 @@
-import { createContext, useContext, useState, useCallback, useMemo } from 'react'
+import {
+  createContext,
+  useContext,
+  useState,
+  useCallback,
+  useMemo,
+} from 'react'
 import type { ReactNode } from 'react'
 import type { Locale, Translations } from './types.ts'
 import zh from './zh.ts'
@@ -29,11 +35,14 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     document.documentElement.lang = newLocale === 'zh' ? 'zh-Hant' : 'en'
   }, [])
 
-  const value = useMemo(() => ({
-    locale,
-    setLocale,
-    t: translations[locale],
-  }), [locale, setLocale])
+  const value = useMemo(
+    () => ({
+      locale,
+      setLocale,
+      t: translations[locale],
+    }),
+    [locale, setLocale],
+  )
 
   return (
     <LanguageContext.Provider value={value}>
@@ -44,6 +53,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
 export function useLanguage() {
   const context = useContext(LanguageContext)
-  if (!context) throw new Error('useLanguage must be used within LanguageProvider')
+  if (!context)
+    throw new Error('useLanguage must be used within LanguageProvider')
   return context
 }

@@ -4,7 +4,9 @@ interface TimelineYearMarkersProps {
   range: TimeRange
 }
 
-export default function TimelineYearMarkers({ range }: TimelineYearMarkersProps) {
+export default function TimelineYearMarkers({
+  range,
+}: TimelineYearMarkersProps) {
   // 生成年份標記
   const startYear = parseInt(range.start.split('-')[0])
   const endYear = parseInt(range.end.split('-')[0])
@@ -16,7 +18,7 @@ export default function TimelineYearMarkers({ range }: TimelineYearMarkersProps)
 
   return (
     <div className="relative h-full">
-      {years.map(year => {
+      {years.map((year) => {
         const yearDate = `${year}-01`
         const position = timeToPosition(yearDate, range)
 

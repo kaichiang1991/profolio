@@ -1,12 +1,12 @@
 import type { Experience } from '../data/experience'
 
 export interface TimeRange {
-  start: string  // 'YYYY-MM'
-  end: string    // 'YYYY-MM'
+  start: string // 'YYYY-MM'
+  end: string // 'YYYY-MM'
 }
 
 export interface ExperienceWithLane extends Experience {
-  lane: number  // 泳道編號，從 0 開始
+  lane: number // 泳道編號，從 0 開始
 }
 
 /**
@@ -85,7 +85,7 @@ export function getTimeRange(experiences: Experience[]): TimeRange {
   let minStart = validExperiences[0].start
   let maxEnd = validExperiences[0].end || currentDate
 
-  validExperiences.forEach(exp => {
+  validExperiences.forEach((exp) => {
     if (exp.start < minStart) minStart = exp.start
     const expEnd = exp.end || currentDate
     if (expEnd > maxEnd) maxEnd = expEnd
@@ -119,7 +119,7 @@ export function timeToPosition(date: string, range: TimeRange): number {
  */
 export function calculatePosition(
   experience: Experience,
-  range: TimeRange
+  range: TimeRange,
 ): { top: number; height: number } {
   const now = new Date()
   const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
@@ -174,7 +174,7 @@ export function assignLanes(experiences: Experience[]): ExperienceWithLane[] {
   const lanes: string[] = []
   const result: ExperienceWithLane[] = []
 
-  sorted.forEach(exp => {
+  sorted.forEach((exp) => {
     const now = new Date()
     const currentDate = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`
     const expEnd = exp.end || currentDate
@@ -187,7 +187,7 @@ export function assignLanes(experiences: Experience[]): ExperienceWithLane[] {
 
       if (laneEndMonths <= expStartMonths) {
         assignedLane = i
-        lanes[i] = expEnd  // 更新該泳道的結束時間
+        lanes[i] = expEnd // 更新該泳道的結束時間
         break
       }
     }
@@ -200,7 +200,7 @@ export function assignLanes(experiences: Experience[]): ExperienceWithLane[] {
 
     result.push({
       ...exp,
-      lane: assignedLane
+      lane: assignedLane,
     })
   })
 

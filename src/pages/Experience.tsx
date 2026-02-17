@@ -11,8 +11,8 @@ import TimelineYearMarkers from '../components/TimelineYearMarkers.tsx'
 const typeLabels: Record<JobType, { zh: string; en: string }> = {
   'full-time': { zh: '全職', en: 'Full-time' },
   'part-time': { zh: '兼職', en: 'Part-time' },
-  'freelance': { zh: '自由接案', en: 'Freelance' },
-  'contract': { zh: '合約', en: 'Contract' },
+  freelance: { zh: '自由接案', en: 'Freelance' },
+  contract: { zh: '合約', en: 'Contract' },
 }
 
 /**
@@ -29,7 +29,7 @@ export default function Experience() {
 
   // 響應式佈局 Hook
   const [windowWidth, setWindowWidth] = React.useState(
-    typeof window !== 'undefined' ? window.innerWidth : 1024
+    typeof window !== 'undefined' ? window.innerWidth : 1024,
   )
 
   React.useEffect(() => {
@@ -38,8 +38,8 @@ export default function Experience() {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  const isMobile = windowWidth < 640    // sm
-  const isTablet = windowWidth < 768    // md
+  const isMobile = windowWidth < 640 // sm
+  const isTablet = windowWidth < 768 // md
 
   const responsiveLayout = {
     laneWidth: isMobile ? 200 : isTablet ? 220 : 250,
@@ -69,12 +69,11 @@ export default function Experience() {
   }
 
   // 計算每個經歷的位置（使用響應式佈局）
-  const cardHeight = 140
+  const minCardHeight = 120 // 卡片最小高度，確保內容可以顯示
   const laneWidth = responsiveLayout.laneWidth
   const barWidth = responsiveLayout.barWidth
   const cardWidth = responsiveLayout.cardWidth
   const timelineHeight = 1200
-  const minBarHeight = 20
 
   // 使用基於時間範圍的 lane 分配（確保矩形條不會在時間上重疊）
   const experiencesWithLanes = assignLanes(experiences)
@@ -87,14 +86,14 @@ export default function Experience() {
     const endDate = exp.end || getCurrentDate()
     const endPosition = calculatePosition(
       { ...exp, start: endDate, end: endDate },
-      timeRange
+      timeRange,
     )
 
-    // 矩形條的高度對應工作時間跨度（end - start）
-    // 使用 minBarHeight 確保超短期工作（<2個月）仍可見
+    // 矩形條和卡片的高度對應工作時間跨度（end - start）
+    // 使用 minCardHeight 確保超短期工作的卡片內容仍可見
     const barHeight = Math.max(
       ((endPosition.top - startPosition.top) / 100) * timelineHeight,
-      minBarHeight
+      minCardHeight,
     )
 
     // 卡片的 Y 位置 = start 時間在時間軸上的位置（頂部對齊）
@@ -111,7 +110,7 @@ export default function Experience() {
   })
 
   // 計算最大 lane 數量（最多同時有幾個矩形條）
-  const maxLane = Math.max(...cardsWithPosition.map(card => card.lane), 0)
+  const maxLane = Math.max(...cardsWithPosition.map((card) => card.lane), 0)
   // 計算所需的矩形條總寬度
   const barsWidth = (maxLane + 1) * (barWidth + 10) // +1 因為 lane 從 0 開始
 
@@ -127,54 +126,69 @@ export default function Experience() {
       {/* Timeline Container - 小屏幕支援橫向滾動 */}
       <div className="flex gap-2 md:gap-4 relative overflow-x-auto md:overflow-x-visible pb-4">
         {/* Year Markers Column */}
-        <div className="w-12 md:w-20 shrink-0 relative" style={{ minHeight: `${timelineHeight}px` }}>
+        <div
+          className="w-12 md:w-20 shrink-0 relative"
+          style={{ minHeight: `${timelineHeight}px` }}
+        >
           <TimelineYearMarkers range={timeRange} />
         </div>
 
         {/* Spacer for bars - 為矩形條預留空間，避免壓到年份 */}
-        <div className="shrink-0" style={{ width: `${barsWidth}px`, minHeight: `${timelineHeight}px` }} />
+        <div
+          className="shrink-0"
+          style={{ width: `${barsWidth}px`, minHeight: `${timelineHeight}px` }}
+        />
 
         {/* Bar Layer - 在時間線左邊 */}
-        <div className="relative shrink-0 pointer-events-none" style={{ width: '0px', minHeight: `${timelineHeight}px` }}>
+        <div
+          className="relative shrink-0 pointer-events-none"
+          style={{ width: '0px', minHeight: `${timelineHeight}px` }}
+        >
           {cardsWithPosition.map((card, index) => {
-              // 為每個工作經歷分配不同顏色
-              const colors = [
-                'bg-blue-500',
-                'bg-green-500',
-                'bg-purple-500',
-                'bg-orange-500',
-                'bg-pink-500',
-                'bg-teal-500',
-                'bg-indigo-500',
-                'bg-yellow-500',
-              ]
-              const barColor = colors[index % colors.length]
+            // 為每個工作經歷分配不同顏色
+            const colors = [
+              'bg-blue-500',
+              'bg-green-500',
+              'bg-purple-500',
+              'bg-orange-500',
+              'bg-pink-500',
+              'bg-teal-500',
+              'bg-indigo-500',
+              'bg-yellow-500',
+            ]
+            const barColor = colors[index % colors.length]
 
-              return (
-                <div
-                  key={`bar-${card.company}-${card.start}-${index}`}
-                  className={`
+            return (
+              <div
+                key={`bar-${card.company}-${card.start}-${index}`}
+                className={`
                     absolute rounded opacity-80
                     ${barColor}
                   `}
-                  style={{
-                    top: `${card.barTop}px`,
-                    // 矩形條從左到右順序：Lane 0（最左）到 Lane maxLane（最右，緊貼時間線）
-                    right: `${(maxLane - card.lane) * (barWidth + 10)}px`,
-                    width: `${barWidth}px`,
-                    height: `${card.barHeight}px`,
-                  }}
-                  title={`${card.title[locale]} (${formatDate(card.start)} - ${card.end ? formatDate(card.end) : locale === 'zh' ? '至今' : 'Present'})`}
-                />
-              )
-            })}
+                style={{
+                  top: `${card.barTop}px`,
+                  // 矩形條從左到右順序：Lane 0（最左）到 Lane maxLane（最右，緊貼時間線）
+                  right: `${(maxLane - card.lane) * (barWidth + 10)}px`,
+                  width: `${barWidth}px`,
+                  height: `${card.barHeight}px`,
+                }}
+                title={`${card.title[locale]} (${formatDate(card.start)} - ${card.end ? formatDate(card.end) : locale === 'zh' ? '至今' : 'Present'})`}
+              />
+            )
+          })}
         </div>
 
         {/* Timeline Axis */}
-        <div className="w-0.5 bg-zinc-300 shrink-0 relative" style={{ minHeight: `${timelineHeight}px` }} />
+        <div
+          className="w-0.5 bg-zinc-300 shrink-0 relative"
+          style={{ minHeight: `${timelineHeight}px` }}
+        />
 
         {/* Experience Cards Container */}
-        <div className="flex-1 relative pl-4" style={{ minHeight: `${timelineHeight}px` }}>
+        <div
+          className="flex-1 relative pl-4"
+          style={{ minHeight: `${timelineHeight}px` }}
+        >
           {cardsWithPosition.map((card, index) => {
             const currentDate = getCurrentDate()
             const isPresent = card.end === null
@@ -197,10 +211,10 @@ export default function Experience() {
               <div
                 key={`${card.company}-${index}`}
                 className={`
-                  absolute rounded-lg border-l-4 shadow-sm
+                  absolute rounded-lg border-l-4
                   p-3 md:p-4
                   text-xs
-                  transition-all duration-200 hover:shadow-md
+                  transition-all duration-200
                   hover:z-10 active:z-10 cursor-pointer
                   ${cardColor}
                 `}
@@ -208,13 +222,18 @@ export default function Experience() {
                   top: `${card.cardTop}px`,
                   left: `${card.lane * laneWidth}px`,
                   width: `${cardWidth}px`, // 使用響應式寬度
-                  minHeight: `${cardHeight}px`,
+                  minHeight: `${card.barHeight}px`, // 卡片最小高度與矩形條相同
+                  boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06)', // 頂部陰影
                 }}
               >
                 {/* 時間 */}
                 <div className="text-[10px] md:text-xs text-zinc-600 mb-1 font-medium">
                   {formatDate(card.start)} -{' '}
-                  {isPresent ? (locale === 'zh' ? '至今' : 'Present') : formatDate(endDate)}
+                  {isPresent
+                    ? locale === 'zh'
+                      ? '至今'
+                      : 'Present'
+                    : formatDate(endDate)}
                 </div>
 
                 {/* 公司名稱 */}
@@ -223,12 +242,9 @@ export default function Experience() {
                 </h3>
 
                 {/* 職位 */}
-                <div className="text-[10px] md:text-xs text-zinc-700 mb-1 font-medium">
+                <div className="text-[10px] md:text-xs text-zinc-700 mb-1 font-medium flex gap-1">
                   {card.title[locale]}
-                </div>
-
-                {/* JobType 標籤 */}
-                <div className="mb-2">
+                  {/* JobType 標籤 */}
                   <span className="inline-block text-[10px] px-1.5 py-0.5 rounded bg-white/60 border border-current/30">
                     {typeLabels[card.type][locale]}
                   </span>

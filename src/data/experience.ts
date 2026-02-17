@@ -3,10 +3,10 @@ export type JobType = 'full-time' | 'part-time' | 'freelance' | 'contract'
 export interface Experience {
   company: string
   title: { zh: string; en: string }
-  start: string  // 格式：'YYYY-MM'
-  end: string | null  // 'YYYY-MM' 或 null（表示至今）
+  start: string // 格式：'YYYY-MM'
+  end: string | null // 'YYYY-MM' 或 null（表示至今）
   type: JobType
-  technologies: string[]  // 使用的技術標籤
+  technologies: string[] // 使用的技術標籤
 }
 
 export const experiences: Experience[] = [
