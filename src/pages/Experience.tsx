@@ -40,7 +40,7 @@ export default function Experience() {
   // 計算每個經歷的位置
   const cardHeight = 140 // 每個卡片的高度（px）
   const laneWidth = 250 // 每個 lane 的寬度（px）- 縮小卡片間距
-  const barWidth = 60 // 矩形條的寬度（px）
+  const barWidth = 10 // 矩形條的寬度（px）
   const timelineHeight = 1200 // 時間軸的總高度（px）
   const cardPadding = 10 // 卡片之間的垂直間距（px）
   const minBarHeight = 20 // 矩形條的最小高度（px）
@@ -147,7 +147,7 @@ export default function Experience() {
                   `}
                   style={{
                     top: `${card.barTop}px`,
-                    right: `${card.lane * (barWidth + 10)}px`, // 在時間線左邊，Lane 0 緊貼時間線
+                    right: `${(maxLane - card.lane) * (barWidth + 10)}px`, // 反轉順序：Lane 0 最左邊
                     width: `${barWidth}px`,
                     height: `${card.barHeight}px`,
                   }}

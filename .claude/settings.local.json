@@ -3,9 +3,7 @@
     "allow": [
       "Bash(git add:*)",
       "Bash(git commit:*)",
-      "Bash(git -C /Users/kai/Documents/dev/kai-profolio rev-parse HEAD)",
-      "Bash(npm run deploy:*)",
-      "mcp__ide__getDiagnostics"
+      "Bash(git -C /Users/kai/Documents/dev/kai-profolio rev-parse HEAD)"
     ]
   }
 }
