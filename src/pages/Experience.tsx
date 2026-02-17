@@ -98,6 +98,11 @@ export default function Experience() {
     }
   })
 
+  // 計算最大 lane 數量（最多同時有幾個矩形條）
+  const maxLane = Math.max(...cardsWithPosition.map(card => card.lane), 0)
+  // 計算所需的矩形條總寬度
+  const barsWidth = (maxLane + 1) * (barWidth + 10) // +1 因為 lane 從 0 開始
+
   return (
     <main className="max-w-6xl mx-auto px-6 py-20">
       <h1 className="font-heading text-4xl md:text-5xl font-bold tracking-tight mb-4">
@@ -113,6 +118,9 @@ export default function Experience() {
         <div className="w-12 md:w-20 shrink-0 relative" style={{ minHeight: `${timelineHeight}px` }}>
           <TimelineYearMarkers range={timeRange} />
         </div>
+
+        {/* Spacer for bars - 為矩形條預留空間，避免壓到年份 */}
+        <div className="shrink-0" style={{ width: `${barsWidth}px`, minHeight: `${timelineHeight}px` }} />
 
         {/* Bar Layer - 在時間線左邊 */}
         <div className="relative shrink-0 pointer-events-none" style={{ width: '0px', minHeight: `${timelineHeight}px` }}>
