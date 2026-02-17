@@ -162,7 +162,7 @@ export default function Experience() {
               <div
                 key={`bar-${card.company}-${card.start}-${index}`}
                 className={`
-                    absolute rounded opacity-80
+                    absolute rounded
                     ${barColor}
                   `}
                 style={{
@@ -171,6 +171,7 @@ export default function Experience() {
                   right: `${(maxLane - card.lane) * (barWidth + 10)}px`,
                   width: `${barWidth}px`,
                   height: `${card.barHeight}px`,
+                  zIndex: index, // 時間越晚的矩形 z-index 越高，重疊時下方矩形顏色為主
                 }}
                 title={`${card.title[locale]} (${formatDate(card.start)} - ${card.end ? formatDate(card.end) : locale === 'zh' ? '至今' : 'Present'})`}
               />
