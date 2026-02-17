@@ -233,10 +233,15 @@ export default function Experience() {
                   {isPresent ? (locale === 'zh' ? '至今' : 'Present') : formatDate(endDate)}
                 </div>
 
-                {/* 職位 */}
-                <h3 className="font-heading text-xs md:text-sm font-semibold mb-1">
-                  {card.title[locale]}
+                {/* 公司名稱 */}
+                <h3 className="font-heading text-xs md:text-sm font-bold mb-1 text-zinc-800">
+                  {card.company}
                 </h3>
+
+                {/* 職位 */}
+                <div className="text-[10px] md:text-xs text-zinc-700 mb-1 font-medium">
+                  {card.title[locale]}
+                </div>
 
                 {/* JobType 標籤 */}
                 <div className="mb-2">
