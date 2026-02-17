@@ -114,10 +114,7 @@ export default function Experience() {
           <TimelineYearMarkers range={timeRange} />
         </div>
 
-        {/* Timeline Axis */}
-        <div className="w-0.5 bg-zinc-300 shrink-0 relative" style={{ minHeight: `${timelineHeight}px` }} />
-
-        {/* Bar Layer */}
+        {/* Bar Layer - 在時間線左邊 */}
         <div className="relative shrink-0 pointer-events-none" style={{ width: '0px', minHeight: `${timelineHeight}px` }}>
           {cardsWithPosition.map((card, index) => {
               // 為每個工作經歷分配不同顏色
@@ -142,7 +139,7 @@ export default function Experience() {
                   `}
                   style={{
                     top: `${card.barTop}px`,
-                    left: `${card.lane * (barWidth + 10)}px`, // 在時間線右邊，Lane 0 緊貼時間線
+                    right: `${card.lane * (barWidth + 10)}px`, // 在時間線左邊，Lane 0 緊貼時間線
                     width: `${barWidth}px`,
                     height: `${card.barHeight}px`,
                   }}
@@ -151,6 +148,9 @@ export default function Experience() {
               )
             })}
         </div>
+
+        {/* Timeline Axis */}
+        <div className="w-0.5 bg-zinc-300 shrink-0 relative" style={{ minHeight: `${timelineHeight}px` }} />
 
         {/* Experience Cards Container */}
         <div className="flex-1 relative pl-4" style={{ minHeight: `${timelineHeight}px` }}>
