@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { ExternalLink } from 'lucide-react'
 import GitHubIcon from '../components/GitHubIcon.tsx'
 import { useLanguage } from '../i18n/index.ts'
@@ -5,6 +6,23 @@ import { projects } from '../data/projects.ts'
 
 export default function Projects() {
   const { locale, t } = useLanguage()
+  const [selectedTag, setSelectedTag] = useState<string | null>(null)
+
+  // Calculate tag frequencies and sort by usage
+  const allTechs = projects.flatMap(p => p.tech)
+  const techFrequency = allTechs.reduce((acc, tech) => {
+    acc[tech] = (acc[tech] || 0) + 1
+    return acc
+  }, {} as Record<string, number>)
+
+  const sortedTags = Object.entries(techFrequency)
+    .sort((a, b) => b[1] - a[1])  // Sort by frequency descending
+    .map(([tech]) => tech)
+
+  // selectedTag, setSelectedTag, and sortedTags will be wired up in the next task
+  void selectedTag
+  void setSelectedTag
+  void sortedTags
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-20">
