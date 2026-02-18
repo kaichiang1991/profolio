@@ -17,6 +17,11 @@ export default function Projects() {
     return Object.entries(freq).sort((a, b) => b[1] - a[1]).map(([tech]) => tech)
   }, []) // empty dep array: projects is a static import constant
 
+  // Filter projects based on selected tag
+  const filteredProjects = selectedTag === null
+    ? projects
+    : projects.filter(p => p.tech.includes(selectedTag))
+
   return (
     <main className="max-w-6xl mx-auto px-6 py-20">
       <h1 className="font-heading text-4xl md:text-5xl font-bold tracking-tight mb-4">
@@ -59,7 +64,7 @@ export default function Projects() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {projects.map((project) => (
+        {filteredProjects.map((project) => (
           <article
             key={project.title[locale]}
             className="bg-white rounded-2xl border border-zinc-200 p-6 hover:border-blue-600 transition-colors duration-200 cursor-pointer flex flex-col gap-4"
