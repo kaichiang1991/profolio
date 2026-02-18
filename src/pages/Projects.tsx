@@ -10,17 +10,25 @@ export default function Projects() {
 
   // Calculate tag frequencies and sort by usage
   const sortedTags = useMemo(() => {
-    const freq = projects.flatMap(p => p.tech).reduce((acc, tech) => {
-      acc[tech] = (acc[tech] || 0) + 1
-      return acc
-    }, {} as Record<string, number>)
-    return Object.entries(freq).sort((a, b) => b[1] - a[1]).map(([tech]) => tech)
+    const freq = projects
+      .flatMap((p) => p.tech)
+      .reduce(
+        (acc, tech) => {
+          acc[tech] = (acc[tech] || 0) + 1
+          return acc
+        },
+        {} as Record<string, number>,
+      )
+    return Object.entries(freq)
+      .sort((a, b) => b[1] - a[1])
+      .map(([tech]) => tech)
   }, []) // empty dep array: projects is a static import constant
 
   // Filter projects based on selected tag
-  const filteredProjects = selectedTag === null
-    ? projects
-    : projects.filter(p => p.tech.includes(selectedTag))
+  const filteredProjects =
+    selectedTag === null
+      ? projects
+      : projects.filter((p) => p.tech.includes(selectedTag))
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-20">
@@ -46,7 +54,7 @@ export default function Projects() {
           {t.projects.all}
         </button>
 
-        {sortedTags.map(tag => (
+        {sortedTags.map((tag) => (
           <button
             key={tag}
             type="button"

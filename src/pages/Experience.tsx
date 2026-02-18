@@ -224,7 +224,8 @@ export default function Experience() {
                   left: `${card.lane * laneWidth}px`,
                   width: `${cardWidth}px`, // 使用響應式寬度
                   minHeight: `${card.barHeight}px`, // 卡片最小高度與矩形條相同
-                  boxShadow: '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06)', // 頂部陰影
+                  boxShadow:
+                    '0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06)', // 頂部陰影
                 }}
               >
                 {/* 時間 */}
