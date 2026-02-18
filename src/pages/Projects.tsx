@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { ExternalLink } from 'lucide-react'
 import GitHubIcon from '../components/GitHubIcon.tsx'
 import { useLanguage } from '../i18n/index.ts'
@@ -9,20 +9,13 @@ export default function Projects() {
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
 
   // Calculate tag frequencies and sort by usage
-  const allTechs = projects.flatMap(p => p.tech)
-  const techFrequency = allTechs.reduce((acc, tech) => {
-    acc[tech] = (acc[tech] || 0) + 1
-    return acc
-  }, {} as Record<string, number>)
-
-  const sortedTags = Object.entries(techFrequency)
-    .sort((a, b) => b[1] - a[1])  // Sort by frequency descending
-    .map(([tech]) => tech)
-
-  // selectedTag, setSelectedTag, and sortedTags will be wired up in the next task
-  void selectedTag
-  void setSelectedTag
-  void sortedTags
+  const sortedTags = useMemo(() => {
+    const freq = projects.flatMap(p => p.tech).reduce((acc, tech) => {
+      acc[tech] = (acc[tech] || 0) + 1
+      return acc
+    }, {} as Record<string, number>)
+    return Object.entries(freq).sort((a, b) => b[1] - a[1]).map(([tech]) => tech)
+  }, []) // empty dep array: projects is a static import constant
 
   return (
     <main className="max-w-6xl mx-auto px-6 py-20">
@@ -32,6 +25,36 @@ export default function Projects() {
       <p className="text-lg text-zinc-700 mb-12 max-w-[65ch]">
         {t.projects.subtitle}
       </p>
+
+      {/* Tag Filter Bar */}
+      <div className="mb-8">
+        <div className="flex flex-wrap gap-2">
+          <button
+            onClick={() => setSelectedTag(null)}
+            className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 cursor-pointer ${
+              selectedTag === null
+                ? 'bg-blue-600 text-white hover:bg-blue-700'
+                : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+            }`}
+          >
+            {t.projects.all}
+          </button>
+
+          {sortedTags.map(tag => (
+            <button
+              key={tag}
+              onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
+              className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 cursor-pointer ${
+                selectedTag === tag
+                  ? 'bg-blue-600 text-white hover:bg-blue-700'
+                  : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+              }`}
+            >
+              {tag}
+            </button>
+          ))}
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {projects.map((project) => (
