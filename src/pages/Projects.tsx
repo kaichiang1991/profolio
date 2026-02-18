@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react'
-import { ExternalLink } from 'lucide-react'
+import { ExternalLink, Lock } from 'lucide-react'
 import GitHubIcon from '../components/GitHubIcon.tsx'
 import { useLanguage } from '../i18n/index.ts'
 import { projects } from '../data/projects.ts'
@@ -91,17 +91,37 @@ export default function Projects() {
                 </span>
               ))}
             </div>
-            <div className="flex gap-3 pt-2">
+            <div className="flex flex-wrap gap-3 pt-2">
               {project.github && (
+                <div className="inline-flex items-center gap-2">
+                  <a
+                    href={project.github}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-950 transition-colors duration-200"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <GitHubIcon size={16} />
+                    {t.projects.code}
+                  </a>
+                  {project.isPrivate && (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-500">
+                      <Lock size={10} />
+                      {t.projects.private}
+                    </span>
+                  )}
+                </div>
+              )}
+              {project.externalLink && (
                 <a
-                  href={project.github}
+                  href={project.externalLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-950 transition-colors duration-200"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <GitHubIcon size={16} />
-                  {t.projects.code}
+                  <ExternalLink size={16} />
+                  {t.projects.link}
                 </a>
               )}
               {project.demo && (

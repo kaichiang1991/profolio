@@ -17,6 +17,8 @@ export interface Translations {
     title: string
     subtitle: string
     code: string
+    private: string
+    link: string
     demo: string
     all: string
     noResults: string
