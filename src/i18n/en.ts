@@ -18,6 +18,8 @@ const en: Translations = {
     title: 'Projects',
     subtitle: "A selection of projects I've built and contributed to.",
     code: 'Code',
+    private: 'Private',
+    link: 'Link',
     demo: 'Demo',
     all: 'All',
     noResults: 'No projects using this technology',

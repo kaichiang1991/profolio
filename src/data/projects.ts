@@ -3,6 +3,8 @@ export interface Project {
   description: { zh: string; en: string }
   tech: string[]
   github?: string
+  isPrivate?: boolean
+  externalLink?: string
   demo?: string
 }
 
