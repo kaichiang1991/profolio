@@ -64,6 +64,12 @@ export default function Projects() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {filteredProjects.length === 0 && (
+          <p className="text-zinc-500 text-center py-12 col-span-full">
+            {t.projects.noResults}
+          </p>
+        )}
+
         {filteredProjects.map((project) => (
           <article
             key={project.title[locale]}
