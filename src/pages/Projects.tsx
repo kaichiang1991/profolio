@@ -27,33 +27,35 @@ export default function Projects() {
       </p>
 
       {/* Tag Filter Bar */}
-      <div className="mb-8">
-        <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2 mb-8">
+        <button
+          type="button"
+          aria-pressed={selectedTag === null}
+          onClick={() => setSelectedTag(null)}
+          className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 cursor-pointer ${
+            selectedTag === null
+              ? 'bg-blue-600 text-white hover:bg-blue-700'
+              : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
+          }`}
+        >
+          {t.projects.all}
+        </button>
+
+        {sortedTags.map(tag => (
           <button
-            onClick={() => setSelectedTag(null)}
+            key={tag}
+            type="button"
+            aria-pressed={selectedTag === tag}
+            onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
             className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 cursor-pointer ${
-              selectedTag === null
+              selectedTag === tag
                 ? 'bg-blue-600 text-white hover:bg-blue-700'
                 : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
             }`}
           >
-            {t.projects.all}
+            {tag}
           </button>
-
-          {sortedTags.map(tag => (
-            <button
-              key={tag}
-              onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
-              className={`rounded-full px-4 py-2 text-sm font-medium transition-colors duration-200 cursor-pointer ${
-                selectedTag === tag
-                  ? 'bg-blue-600 text-white hover:bg-blue-700'
-                  : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
+        ))}
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
