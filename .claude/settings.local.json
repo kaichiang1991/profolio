@@ -2,9 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(git commit:*)",
       "Bash(git -C /Users/kai/Documents/dev/kai-profolio rev-parse HEAD)",
       "mcp__ide__getDiagnostics"
     ]
-  }
+  },
+  "prefersReducedMotion": false
 }
