@@ -10,7 +10,7 @@ const zh: Translations = {
   hero: {
     greeting: '嗨，我是 Kai',
     subtitle:
-      '專注於 TypeScript 的全端開發者。我使用現代工具與最佳實踐，打造乾淨且高效能的網頁應用程式。',
+      '專注於 TypeScript 的全端開發者。近年來工作多以接案為主，經手的項目包含官網、會員系統、Liff、POS 等。',
     viewProjects: '查看作品',
     github: 'GitHub',
   },
