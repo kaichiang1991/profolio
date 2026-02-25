@@ -19,7 +19,7 @@ export const projects: Project[] = [
       en: 'A minimalist portfolio built with React and Tailwind CSS, deployed on GitHub Pages.',
     },
     tech: ['React', 'TypeScript', 'Tailwind CSS', 'Vite'],
-    github: 'https://github.com/kaichiang1991/profolio',
+    github: 'https://github.com/kaichiang1991/portfolio',
   },
   {
     title: {
